@@ -100,7 +100,7 @@ class MarketFetch():
 
     def format_time(self, server_time):
         time = str(server_time)[0:10]
-        res = datetime.datetime.fromtimestamp(int(time)).strftime("%a, %d %b %Y %H:%M:%S")
+        res = datetime.datetime.fromtimestamp(int(time)).strftime("%a, %d %b %Y %H:%M:%S %p")
         return res
 
     def ping_server(self):
