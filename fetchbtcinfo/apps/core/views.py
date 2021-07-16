@@ -60,4 +60,13 @@ class StatusView(View):
         status = market.get_status()
         return JsonResponse(status)
 
+class ServerTimeView(View):
+    """ View for checking server time """
+
+    http_method_names = ['get']
+
+    def get(self, request, *args, **kwargs):
+        status = market.get_server_time()
+        return JsonResponse(status)
+
             

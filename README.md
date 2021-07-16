@@ -18,7 +18,7 @@ Project using Binance API to fetch a symbol market data from binance
     "pair" : "btcusdt" #required
     "interval": "1h"  # 1m 5m
     "limit": 8 # max 10
-} to server link:
-/get/candle/
+} to server link: /get/candle/
 
-5. check server status send GET request to /get/status/
+5. check server status, send GET request to /get/status/
+6. check server time, send GET request to /get/time/

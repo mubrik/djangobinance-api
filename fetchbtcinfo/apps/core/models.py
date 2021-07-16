@@ -2,6 +2,7 @@ from binance.spot import Spot
 from binance.error import ClientError, ServerError
 from decouple import config
 import decimal as dec
+import datetime
 
 # local context for decimal
 dec.getcontext().rounding = "ROUND_HALF_UP"
@@ -59,14 +60,17 @@ class MarketFetch():
         # format candlestick
         result = []
         for candlestick in kline_data:
+            open_time = self.format_time(candlestick[0])
+            close_time = self.format_time(candlestick[6])
+
             new_dict = {
-                "open_time": candlestick[0],
+                "open_time": open_time,
                 "open": candlestick[1],
                 "high": candlestick[2],
                 "low": candlestick[3],
                 "close": candlestick[4],
                 "volume": candlestick[5],
-                "close_time": candlestick[6],
+                "close_time": close_time,
                 "trades": candlestick[8],
             }
             result.append(new_dict)
@@ -86,6 +90,18 @@ class MarketFetch():
     def get_status(self):
         status = self.binance.system_status()
         return status
+
+    def get_server_time(self):
+        obj = self.binance.time()
+        time = self.format_time(obj["serverTime"])
+        return {
+            "time": time
+        }
+
+    def format_time(self, server_time):
+        time = str(server_time)[0:10]
+        res = datetime.datetime.fromtimestamp(int(time)).strftime("%a, %d %b %Y %H:%M:%S")
+        return res
 
     def ping_server(self):
         status = self.binance.ping()
