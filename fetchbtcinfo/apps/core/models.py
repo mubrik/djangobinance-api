@@ -20,7 +20,10 @@ class MarketFetch():
         self.key = key
         self.secret = secret
         self.uri = url
-        self.instance = Spot(self.key, self.secret, base_url=self.uri)
+        self.make_client()
+
+    def make_client(self):
+        self.binance = Spot(self.key, self.secret, base_url=self.uri)
 
     def get_price(self, pair, param):
         try:
@@ -52,7 +55,8 @@ class MarketFetch():
     def get_kline_candlestick(self, pair, interval="1h", limit=2):
         # limit amount of candle sticks
         main_limit = limit if limit < 10 else 10
-        kline_data = self.instance.klines(symbol=pair, interval=interval, limit=main_limit)
+        kline_data = self.binance.klines(symbol=pair, interval=interval, limit=main_limit)
+        # format candlestick
         result = []
         for candlestick in kline_data:
             new_dict = {
@@ -72,19 +76,19 @@ class MarketFetch():
         }
 
     def get_avg_price(self, pair):
-        avg_price = self.instance.avg_price(pair)
+        avg_price = self.binance.avg_price(pair)
         return avg_price
 
     def get_latest_price(self, pair):
-        price = self.instance.ticker_price(pair)
+        price = self.binance.ticker_price(pair)
         return price
 
     def get_status(self):
-        status = self.instance.system_status()
+        status = self.binance.system_status()
         return status
 
     def ping_server(self):
-        status = self.instance.ping()
+        status = self.binance.ping()
         return status
 
 market = MarketFetch(api, key, base_uri)
